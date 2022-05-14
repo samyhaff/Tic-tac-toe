@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#include "game.h"
+
 #define WIDTH 640
 #define HEIGHT 480
 
@@ -28,10 +30,28 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "SDL could not create renderer: %s\n", SDL_GetError());
     }
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
-    SDL_Delay(2000);
+    game_t game = { .state = RUNNING };
+
+    SDL_Event e;
+
+    while (game.state != QUIT) {
+        while (SDL_PollEvent(&e) != 0) {
+            switch (e.type) {
+                case SDL_QUIT:
+                    game.state = QUIT;
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
+                    break;
+                default:
+                    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+                    break;
+            }
+        }
+
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+    }
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);

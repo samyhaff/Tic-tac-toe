@@ -5,16 +5,28 @@
 #define HEIGHT 480
 
 int main(int argc, char *argv[]) {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Window *window = NULL;
+    SDL_Renderer *renderer = NULL;
 
-    SDL_Window *window = SDL_CreateWindow("Tic-tac-toe",
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        fprintf(stderr, "SDL could not initialize: %s\n", SDL_GetError());
+        exit(1);
+    }
+
+    window = SDL_CreateWindow("Tic-tac-toe",
                               SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED,
                               WIDTH,
                               HEIGHT,
-                              0);
+                              SDL_WINDOW_SHOWN);
+    if (window == NULL) {
+        fprintf(stderr, "SDL could not create window: %s\n", SDL_GetError());
+    }
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == NULL) {
+        fprintf(stderr, "SDL could not create renderer: %s\n", SDL_GetError());
+    }
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);

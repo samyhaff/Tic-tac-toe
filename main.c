@@ -2,6 +2,8 @@
 #include <SDL2/SDL.h>
 
 #include "game.h"
+#include "render.h"
+#include "process_events.h"
 
 #define WIDTH 640
 #define HEIGHT 480
@@ -10,7 +12,7 @@ int main(int argc, char *argv[]) {
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         fprintf(stderr, "SDL could not initialize: %s\n", SDL_GetError());
         exit(1);
     }
@@ -25,7 +27,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "SDL could not create window: %s\n", SDL_GetError());
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL) {
         fprintf(stderr, "SDL could not create renderer: %s\n", SDL_GetError());
     }
@@ -35,22 +37,9 @@ int main(int argc, char *argv[]) {
     SDL_Event e;
 
     while (game.state != QUIT) {
-        while (SDL_PollEvent(&e) != 0) {
-            switch (e.type) {
-                case SDL_QUIT:
-                    game.state = QUIT;
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
-                    break;
-                default:
-                    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-                    break;
-            }
-        }
-
-        SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);
+        process_events(&e, &game);
+        render(renderer, &game);
+        SDL_Delay(200);
     }
 
     SDL_DestroyWindow(window);

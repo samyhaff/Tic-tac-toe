@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
-
 #include "game.h"
 #include "render.h"
 #include "process_events.h"
-
-#define WIDTH 640
-#define HEIGHT 480
 
 int main(int argc, char *argv[]) {
     SDL_Window *window = NULL;
@@ -20,8 +16,8 @@ int main(int argc, char *argv[]) {
     window = SDL_CreateWindow("Tic-tac-toe",
                               SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED,
-                              WIDTH,
-                              HEIGHT,
+                              SCREEN_WIDTH,
+                              SCREEN_HEIGHT,
                               SDL_WINDOW_SHOWN);
     if (window == NULL) {
         fprintf(stderr, "SDL could not create window: %s\n", SDL_GetError());
@@ -32,7 +28,10 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "SDL could not create renderer: %s\n", SDL_GetError());
     }
 
-    game_t game = { .state = RUNNING };
+    game_t game = { .state = RUNNING,
+                    .board = { EMPTY, EMPTY, EMPTY,
+                               EMPTY, EMPTY, EMPTY,
+                               EMPTY, EMPTY, EMPTY }};
 
     SDL_Event e;
 

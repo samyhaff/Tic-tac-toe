@@ -2,6 +2,7 @@ CC=gcc
 CFLAGS=-Wall -g -lSDL2
 
 all: main
+	./main
 
 main: main.o process_events.o render.o
 	$(CC) $(CFLAGS) main.o render.o process_events.o -o main

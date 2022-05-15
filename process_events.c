@@ -26,7 +26,7 @@ void process_events(SDL_Event *e, game_t *game) {
                 }
 
             case SDL_MOUSEBUTTONDOWN: {
-                player_move(game, e->button.x, e->button.y);
+                cell_click(game, e->button.x, e->button.y);
                 break;
             }
 

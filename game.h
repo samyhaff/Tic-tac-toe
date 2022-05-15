@@ -14,6 +14,7 @@ enum { RUNNING, QUIT };
 typedef struct {
     int state;
     int board[N * N];
+    int player;
 } game_t;
 
 #endif

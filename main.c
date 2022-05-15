@@ -31,7 +31,8 @@ int main(int argc, char *argv[]) {
     game_t game = { .state = RUNNING,
                     .board = { EMPTY, EMPTY, EMPTY,
                                EMPTY, EMPTY, EMPTY,
-                               EMPTY, EMPTY, EMPTY }};
+                               EMPTY, EMPTY, EMPTY },
+                    .player = PLAYER_X};
 
     SDL_Event e;
     // handle mouse click bug on startup

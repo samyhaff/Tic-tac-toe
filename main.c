@@ -29,16 +29,18 @@ int main(int argc, char *argv[]) {
     }
 
     game_t game = { .state = RUNNING,
-                    .board = { PLAYER_X, PLAYER_O, EMPTY,
-                               PLAYER_O, PLAYER_X, EMPTY,
-                               EMPTY, PLAYER_O, PLAYER_X }};
+                    .board = { EMPTY, EMPTY, EMPTY,
+                               EMPTY, EMPTY, EMPTY,
+                               EMPTY, EMPTY, EMPTY }};
 
     SDL_Event e;
+    // handle mouse click bug on startup
+    while (SDL_PollEvent(&e)) {}
 
     while (game.state != QUIT) {
         process_events(&e, &game);
         render(renderer, &game);
-        SDL_Delay(200);
+        SDL_Delay(100);
     }
 
     SDL_DestroyWindow(window);

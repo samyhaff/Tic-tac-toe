@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include "game.h"
+#include "logic.h"
 
 void process_events(SDL_Event *e, game_t *game) {
     while (SDL_PollEvent(e) != 0) {
@@ -25,6 +26,7 @@ void process_events(SDL_Event *e, game_t *game) {
                 }
 
             case SDL_MOUSEBUTTONDOWN: {
+                player_move(game, e->button.x, e->button.y);
                 break;
             }
 

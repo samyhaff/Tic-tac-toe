@@ -5,9 +5,6 @@
 
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
-const int cell_width = SCREEN_WIDTH / N;
-const int cell_height = SCREEN_HEIGHT / N;
-
 SDL_Color grid_color = { .r = 100, .g = 100, .b = 100 };
 SDL_Color player_x_color = { .r = 255, .g = 0, .b = 0 };
 SDL_Color player_o_color = { .r = 0, .g = 0, .b = 255 };
@@ -91,10 +88,10 @@ void render_board(SDL_Renderer *renderer, game_t *game) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             if (game->board[N * i + j] == PLAYER_X) {
-                render_player_x(renderer, i, j);
+                render_player_x(renderer, j, i);
             }
             else if (game->board[N * i + j] == PLAYER_O) {
-                render_player_o(renderer, i, j);
+                render_player_o(renderer, j, i);
             }
         }
     }

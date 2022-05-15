@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -g -lSDL2
+CFLAGS=-Wall -g -lSDL2 -lSDL2_gfx
 
 all: main
 	./main

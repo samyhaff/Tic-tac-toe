@@ -29,9 +29,9 @@ int main(int argc, char *argv[]) {
     }
 
     game_t game = { .state = RUNNING,
-                    .board = { EMPTY, EMPTY, EMPTY,
-                               EMPTY, EMPTY, EMPTY,
-                               EMPTY, EMPTY, EMPTY }};
+                    .board = { PLAYER_X, PLAYER_O, EMPTY,
+                               PLAYER_O, PLAYER_X, EMPTY,
+                               EMPTY, PLAYER_O, PLAYER_X }};
 
     SDL_Event e;
 

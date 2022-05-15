@@ -8,7 +8,7 @@
 const int cell_width = SCREEN_WIDTH / N;
 const int cell_height = SCREEN_HEIGHT / N;
 
-SDL_Color grid_color = { .r = 255, .g = 255, .b = 255 };
+SDL_Color grid_color = { .r = 100, .g = 100, .b = 100 };
 SDL_Color player_x_color = { .r = 255, .g = 0, .b = 0 };
 SDL_Color player_o_color = { .r = 0, .g = 0, .b = 255 };
 SDL_Color board_color = { .r = 0, .g = 0, .b = 0 };
@@ -16,8 +16,26 @@ SDL_Color board_color = { .r = 0, .g = 0, .b = 0 };
 void render_grid(SDL_Renderer *renderer, game_t *game) {
     for (int i = 1; i < N; i++) {
         SDL_SetRenderDrawColor(renderer, grid_color.r, grid_color.g, grid_color.b, 255);
-        SDL_RenderDrawLine(renderer, 0, i * cell_height, SCREEN_WIDTH, i * cell_height);
-        SDL_RenderDrawLine(renderer, i * cell_width, 0, i * cell_width, SCREEN_HEIGHT);
+        thickLineRGBA(renderer,
+                      0,
+                      i * cell_height,
+                      SCREEN_WIDTH,
+                      i * cell_height,
+                      3,
+                      grid_color.r,
+                      grid_color.g,
+                      grid_color.b,
+                      255);
+        thickLineRGBA(renderer,
+                      i * cell_width,
+                      0,
+                      i * cell_width,
+                      SCREEN_HEIGHT,
+                      3,
+                      grid_color.r,
+                      grid_color.g,
+                      grid_color.b,
+                      255);
     }
 }
 

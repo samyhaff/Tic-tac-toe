@@ -30,9 +30,32 @@ int check_player_win(game_t *game, int player) {
     return 0;
 }
 
+void reset_game(game_t *game) {
+    for (int i = 0; i < N * N; i++) game->board[i] = EMPTY;
+    game->state = RUNNING;
+    game->player = PLAYER_X;
+}
+
+int count_moves(game_t *game) {
+    int count = 0;
+    for (int i = 0; i < N * N; i++) {
+        if (game->board[i] != EMPTY) count++;
+    }
+    return count;
+}
+
+int check_tie(game_t *game) {
+    return count_moves(game) == N * N;
+}
+
 void cell_click(game_t *game, int x, int y) {
-    update_board(game, x, y);
-    switch_player(game);
-    if (check_player_win(game, PLAYER_X)) game->state = QUIT;
-    if (check_player_win(game, PLAYER_O)) game->state = QUIT;
+    if (game->state == RUNNING) {
+        update_board(game, x, y);
+        switch_player(game);
+        if (check_player_win(game, PLAYER_X)) game->state = PLAYER_X_WIN;
+        if (check_player_win(game, PLAYER_O)) game->state =PLAYER_O_WIN;
+        if (check_tie(game)) game->state = TIE;
+    } else {
+        reset_game(game);
+    }
 }

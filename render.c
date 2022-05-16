@@ -5,23 +5,29 @@
 
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
-SDL_Color grid_color = { .r = 100, .g = 100, .b = 100 };
+SDL_Color tie_grid_color = { .r = 100, .g = 100, .b = 100 };
+SDL_Color running_grid_color = { .r = 200, .g = 200, .b = 200 };
 SDL_Color player_x_color = { .r = 255, .g = 0, .b = 0 };
 SDL_Color player_o_color = { .r = 0, .g = 0, .b = 255 };
 SDL_Color board_color = { .r = 0, .g = 0, .b = 0 };
 
 void render_grid(SDL_Renderer *renderer, game_t *game) {
+    SDL_Color color;
+    if (game->state == RUNNING) color = running_grid_color;
+    else if (game->state == PLAYER_O_WIN) color = player_o_color;
+    else if (game->state == PLAYER_X_WIN) color = player_x_color;
+    else color = tie_grid_color;
+
     for (int i = 1; i < N; i++) {
-        SDL_SetRenderDrawColor(renderer, grid_color.r, grid_color.g, grid_color.b, 255);
         thickLineRGBA(renderer,
                       0,
                       i * cell_height,
                       SCREEN_WIDTH,
                       i * cell_height,
                       3,
-                      grid_color.r,
-                      grid_color.g,
-                      grid_color.b,
+                      color.r,
+                      color.g,
+                      color.b,
                       255);
         thickLineRGBA(renderer,
                       i * cell_width,
@@ -29,9 +35,9 @@ void render_grid(SDL_Renderer *renderer, game_t *game) {
                       i * cell_width,
                       SCREEN_HEIGHT,
                       3,
-                      grid_color.r,
-                      grid_color.g,
-                      grid_color.b,
+                      color.r,
+                      color.g,
+                      color.b,
                       255);
     }
 }

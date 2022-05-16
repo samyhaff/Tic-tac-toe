@@ -52,9 +52,9 @@ void cell_click(game_t *game, int x, int y) {
     if (game->state == RUNNING) {
         update_board(game, x, y);
         switch_player(game);
+        if (check_tie(game)) game->state = TIE;
         if (check_player_win(game, PLAYER_X)) game->state = PLAYER_X_WIN;
         if (check_player_win(game, PLAYER_O)) game->state =PLAYER_O_WIN;
-        if (check_tie(game)) game->state = TIE;
     } else {
         reset_game(game);
     }

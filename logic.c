@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include "game.h"
 
-void update_board(game_t *game, int x, int y) {
+int update_board(game_t *game, int x, int y) {
     int cell_idx = N * (y / cell_height) + (x / cell_width);
-    if ((cell_idx < 0) | (cell_idx > N*N)) return;
-    if (game->board[cell_idx] != EMPTY) return;
+    if ((cell_idx < 0) | (cell_idx > N*N)) return 0;
+    if (game->board[cell_idx] != EMPTY) return 0;
     game->board[cell_idx] = game->player;
+    return 1;
 }
 
 void switch_player(game_t *game) {
@@ -48,13 +49,18 @@ int check_tie(game_t *game) {
     return count_moves(game) == N * N;
 }
 
+void update_state(game_t *game) {
+    if (check_tie(game)) game->state = TIE;
+    if (check_player_win(game, PLAYER_X)) game->state = PLAYER_X_WIN;
+    if (check_player_win(game, PLAYER_O)) game->state =PLAYER_O_WIN;
+}
+
 void cell_click(game_t *game, int x, int y) {
     if (game->state == RUNNING) {
-        update_board(game, x, y);
-        switch_player(game);
-        if (check_tie(game)) game->state = TIE;
-        if (check_player_win(game, PLAYER_X)) game->state = PLAYER_X_WIN;
-        if (check_player_win(game, PLAYER_O)) game->state =PLAYER_O_WIN;
+        if (update_board(game, x, y)) {
+            switch_player(game);
+            update_state(game);
+        }
     } else {
         reset_game(game);
     }

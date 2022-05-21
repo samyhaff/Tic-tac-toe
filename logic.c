@@ -55,10 +55,67 @@ void update_state(game_t *game) {
     if (check_player_win(game, PLAYER_O)) game->state =PLAYER_O_WIN;
 }
 
+int static_eval(game_t *game) {
+    if (check_player_win(game, PLAYER_X)) return PLAYER_X_WIN;
+    if (check_tie(game)) return TIE;
+    if (check_player_win(game, PLAYER_O)) return PLAYER_O_WIN;
+    return -1;
+}
+
+int minimax(game_t *game, int depth, int is_max_player) {
+    if ((depth == 0) | (static_eval(game) != -1)) return static_eval(game);
+
+    if (is_max_player) {
+        int eval, max_eval = PLAYER_O_WIN - 1;
+        for (int i = 0; i < N * N; i++) {
+            if (game->board[i] == EMPTY) {
+                game->board[i] = PLAYER_X;
+                eval = minimax(game, depth -1, 0);
+                max_eval = eval > max_eval ? eval : max_eval;
+                game->board[i] = EMPTY;
+            }
+        }
+        return max_eval;
+     } else {
+        int eval, min_eval = PLAYER_X_WIN + 1;
+        for (int i = 0; i < N * N; i++) {
+            if (game->board[i] == EMPTY) {
+                game->board[i] = PLAYER_O;
+                eval = minimax(game, depth -1, 1);
+                min_eval = eval < min_eval ?  eval : min_eval;
+                game->board[i] = EMPTY;
+            }
+        }
+        return min_eval;
+    }
+}
+
+int get_best_move(game_t *game) {
+    int score, best_move, best_score = PLAYER_X_WIN + 1;
+    for (int i = 0; i < N * N; i++) {
+        if (game->board[i] == EMPTY) {
+            game->board[i] = PLAYER_O;
+            score = minimax(game, AI_DEPTH, 1);
+            if (score < best_score) {
+                best_score = score;
+                best_move = i;
+            }
+            game->board[i] = EMPTY;
+        }
+    }
+    return best_move;
+}
+
+void ai_move(game_t *game) {
+    int move = get_best_move(game);
+    game->board[move] = PLAYER_O;
+}
+
 void cell_click(game_t *game, int x, int y) {
     if (game->state == RUNNING) {
         if (update_board(game, x, y)) {
-            switch_player(game);
+            // switch_player(game);
+            ai_move(game);
             update_state(game);
         }
     } else {
